@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :require_user_logged_in, only: [:index, :show]
+
   def index
     @users = User.order(id: :desc).page(params[:page]).per(25)
   end
@@ -13,7 +15,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    
+
     if @user.save
       flash[:success] = "ユーザを登録しました。"
       redirect_to @user
@@ -22,7 +24,7 @@ class UsersController < ApplicationController
       render :new
     end
   end
-  
+
   private
   
   def user_params
